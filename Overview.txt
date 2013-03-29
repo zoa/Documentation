@@ -1,27 +1,36 @@
 Dearest geeks,
 
-I've had several requests to give an overview of the code as it stands currently, so here goes!
+Here is an overview of the codebase used for/derived from Flux Foundation's Zoa project.
 
 THE REPOSITORIES:
 
-https://github.com/zoa has all our repositories. Since the Arduino IDE sucks, we had to put each folder into its own repository, so there are a lot of them, not all of which are currently in use. These are the ones that I'm actively working with: --LED_master_loop (clone into sketchbook directory) --Zoa_WS2801 (clone into sketchbook/libraries) --Waveform_generators (clone into sketchbook/libraries) --LED_strip (clone into sketchbook/libraries...this has the audio code in it...I should move that into its own repo at some point but haven't yet) --MsTimer2 - this isn't in github - find it online and download it into sketchbook/libraries.
+https://github.com/zoa has all our repositories. Since the Arduino IDE sucks, we had to put each folder into its own repository, so there are a lot of them, not all of which are currently in use. For any project, you will generally need one Arduino sketch (cloned into your sketchbook directory) plus multiple libraries used by that sketch (all cloned into sketchbook/libraries).
 
-To clone a repo on linux, navigate to the directory that will hold the repo folder (either sketchbook or sketchbook/libraries) and type "git clone https://github.com/zoa/<repo name>". If you have additional git questions, bug me or Poe.
+These are the sketches you may want to use (all variants of each other):
+--LED_master_loop - main Zoa lights
+--Button_LEDs - Zoa button lights
+--Sidewalk - Coachella lights
+
+These are the libraries that we are actively working with: 
+--Zoa_WS2801
+--Waveform_generators
+--LED_strip (this has the audio code in it...I should move that into its own repo at some point but haven't yet. If you aren't using mics, you don't need this.) 
+--MsTimer2 - this isn't in github - find it online and download it into a subfolder within sketchbook/libraries.
+
+To clone a repo on linux, navigate to the directory that will hold the repo folder (either sketchbook or sketchbook/libraries) and type "git clone https://github.com/zoa/<repo name>". This will put the repo into a subfolder, as it should. If you have additional git questions, bug Sarah or Poe.
 
 WHAT THEY DO:
 
---LED_master loop is the sketch that gets uploaded to the Arduino. It displays and switches between LED routines. To add a routine, you need to write a function that pushes new values to the strip and add an entry in the switch statement in the main loop that sets the update_function pointer to point to your function.
+--LED_master loop (or Sidewalk, etc) is the sketch that gets uploaded to the Arduino. It displays and switches between LED routines. To add a routine, you need to write a function that pushes new values to the strip and add an entry in the switch statement in the main loop that sets the get_next_color function pointer to point to your function.
 
 --Zoa_WS2801 has a version of the Adafruit_WS2801 library with some additional functionality we need. I kept the original library essentially as-is, to avoid screwing it up, and then added a derived class with some additional shit. You'd probably mostly be calling pushFront (set the 1st LED to a new value and shift all the others down) or setPixelColor (does what it says on the tin).
 
---Waveform_generators has the classes I'm using to generate waveforms. There's a base class called Waveform_generators that all others are derived from. The derived classes need to implement 4 methods to get the current and next values of the waveform (both as a float and as a byte). There's also a Waveform_utilities.h where you can stick freestanding functions that you don't want to put into a class.
+--Waveform_generators has the classes I'm using to generate waveforms. There's a base class called Waveform_generators that all others are derived from. The derived classes need to implement the method that gets the next value of the waveform. There's also a Waveform_utilities.h where you can stick freestanding functions that you don't want to put into a class.
 
 GENERAL COMMENTS:
 
-If anyone tries to do this and encounters any errors, please let me know asap so I can make sure the thing is in good working order and will work for anyone.
+If anyone tries to do this and encounters any errors, please let a code-savvy geek know asap so we can make sure the thing is in good working order and will work for anyone.
 
-If you would like to add some functionality but don't want to deal with figuring out the whole class hierarchy/object model, that is totally OK and encouraged - just write some functions that do whatever you want to do and push them or give them to me and I'll integrate them. It is totally fine if they are in a messy format, or if they just generate a bunch of RGB values but don't actually update the LEDs.
+We encourage participation from anyone who is interested and willing! If you would like to add some functionality but don't want to deal with figuring out the whole class hierarchy/object model, just check in with the coding lead on your current project about the best way to integrate your contributions. If you are able to write a function that spits out pretty RGB values, we can likely handle the rest.
 
-Feel free to hit me up by email or text (503-318-3204) with additional questions - I am happy to help get you up to speed!
-
-Hearts, Sarah
+If you have additional questions, hit up the flux geeks list or email Sarah (sarah.tappon@gmail.com), the original author of this document.
